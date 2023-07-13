@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bit.edu.user.mapper.UserMapper">
+
+    <insert id="createUser" parameterType="bit.edu.user.dto.UserRegisterDto">
+        INSERT INTO book_user(user_id, user_pass, is_man, user_introduce)
+        VALUES (#{userId}, #{userPass}, #{isMan}, #{userIntroduce});
+    </insert>
+
+
+    <select id="existUserId" resultType="boolean">
+        SELECT COUnT(*)
+        FROM book_user
+        WHERE user_id = #{userId}
+    </select>
+
+
+</mapper>

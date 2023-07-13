@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="bit.edu.book.mapper.BookMapper">
+
+    <select id="findAllBookCopy" resultType="bit.edu.book.dto.BookCopyDto">
+        SELECT book_seq AS bookSeq,
+               bi.book_title AS bookTitle,
+               bi.book_author AS bookAuthor,
+               bi.book_published_date AS bookPublishedDate
+        FROM book_copy AS bc
+              INNER JOIN book_info AS bi ON bc.book_isbn = bi.book_isbn;
+    </select>
+
+    <delete id="deleteByBookSeq" parameterType="int">
+        DELETE
+        FROM book_copy
+        WHERE book_seq = #{bookSeq};
+    </delete>
+
+    <insert id="createBookInfo" parameterType="bit.edu.book.dto.BookRegisterDto">
+        INSERT INTO book_info(book_isbn, book_title, book_author, book_published_date)
+        VALUES (#{bookIsbn}, #{bookTitle}, #{bookAuthor}, #{bookPublishDate})
+    </insert>
+
+    <insert id="createBookCopy" parameterType="bit.edu.book.dto.BookRegisterDto">
+        INSERT INTO book_copy(book_position, book_status, book_isbn)
+        VALUES(#{bookPosition}, #{bookStatus}, #{bookIsbn});
+    </insert>
+
+    <select id="findBookDetailByBookSeq" parameterType="int" resultType="bit.edu.book.dto.BookDetailDto">
+        SELECT bc.book_seq AS bookSeq,
+               bi.book_isbn AS bookIsbn,
+               bi.book_title AS bookTitle,
+               bi.book_author AS bookAuthor,
+               bi.book_published_date AS bookPublishedDate,
+               bc.book_position AS bookPosition,
+               bc.book_status AS bookStatus
+        FROM book_copy AS bc
+                 INNER JOIN book_info AS bi ON bc.book_isbn = bi.book_isbn
+        WHERE bc.book_seq = #{bookSeq};
+    </select>
+
+    <update id="updateBookInfoByBookIsbn" parameterType="bit.edu.book.dto.BookModifyDto">
+        UPDATE book_info
+        SET book_isbn = #{bookIsbn},
+            book_title = #{bookTitle},
+            book_author = #{bookAuthor},
+            book_published_date = #{bookPublishedDate}
+        WHERE book_isbn = #{bookIsbn}
+    </update>
+
+    <update id="updateBookCopyByBookSeq" parameterType="bit.edu.book.dto.BookModifyDto">
+        UPDATE book_copy
+        SET book_position = #{bookPosition},
+            book_status = #{bookStatus}
+        WHERE book_seq = #{bookSeq}
+    </update>
+
+
+
+
+</mapper>
